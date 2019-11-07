@@ -1,0 +1,38 @@
+{
+  "name": "triage-action",
+  "version": "0.0.1",
+  "private": true,
+  "description": "A GitHub Action that manages triage state in issues.",
+  "keywords": [
+    "actions",
+    "triage",
+    "milestone",
+    "project"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Logerfo/triage-action.git"
+  },
+  "author": {
+    "email": "bruno@logerfo.tk",
+    "name": "Bruno Logerfo",
+    "url": "https://github.com/Logerfo"
+  },
+  "homepage": "https://github.com/triage-action",
+  "bugs": "https://github.com/triage-action/issues",
+  "license": "MIT",
+  "main": "src/main.js",
+  "scripts": {
+    "build": "ncc build src/main.js",
+    "lint": "eslint src/main.js"
+  },
+  "dependencies": {
+    "@actions/core": "1.2.0",
+    "@actions/github": "1.1.0",
+    "js-yaml": "3.13.1"
+  },
+  "devDependencies": {
+    "eslint": "6.6.0",
+    "@zeit/ncc": "0.20.5"
+  }
+}

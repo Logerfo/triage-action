@@ -1,0 +1,28 @@
+name: triage-action
+description: Manages triage state in issues.
+author: Bruno Logerfo
+
+branding:
+  icon: clock
+  color: purple
+
+inputs:
+  github-token:
+    description: The `GITHUB_TOKEN` secret.
+    required: true
+  label:
+    description: The triage label of your repository.
+    default: triage
+  project:
+    description: Enable or disable the idea that adding an issue to a project drops its triage state.
+    default: true
+  milestone:
+    description: Enable or disable the idea that setting a milestone to an issue drops its triage state.
+    default: true
+  config-path:
+    description: The optional configuration file path.
+    default: .github/triage.yml
+
+runs:
+  using: 'node12'
+  main: 'dist/index.js'
