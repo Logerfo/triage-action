@@ -49,7 +49,7 @@ async function run() {
                     return;
                 }
                 var issueResponse = await client.issues.get({
-                    issue_number: getCardIssueId(context.payload),
+                    issue_number: getCardIssueId(context.payload.project_card),
                     owner,
                     repo,
                 });
