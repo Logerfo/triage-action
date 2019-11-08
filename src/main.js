@@ -58,7 +58,7 @@ async function run() {
                     repo,
                 });
                 core.debug(JSON.stringify(issueResponse.data));
-                await triage(issueResponse.data);
+                await triage(issueResponse.data, event.action == "created");
                 break;
         }
     }
@@ -120,12 +120,12 @@ async function projectContained(issue) {
     return false;
 }
 
-async function triage(issue) {
+async function triage(issue, knownContained = false) {
     if (issue.state != "open") {
         core.info("Issue is not open. Stepping out...");
         return;
     }
-    const isTriage = milestone && !issue.milestone && project && !await projectContained(issue);
+    const isTriage = milestone && !issue.milestone && project && !(knownContained || await projectContained(issue));
     const isLabeled = issue.labels.map(labelMap).includes(label);
     if (isTriage && !isLabeled) {
         core.info(`Applying "${label}" label...`);
