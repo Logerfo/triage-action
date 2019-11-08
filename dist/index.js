@@ -432,7 +432,7 @@ async function run() {
             return;
         }
         switch (github.context.eventName) {
-            case "issue":
+            case "issues":
                 if (event.action != "opened" && !milestone) {
                     core.info("Milestone is disbled. Consider removing the \"milestoned\" and \"demilestoned\" from the trigger types. Stepping out...");
                     return;
