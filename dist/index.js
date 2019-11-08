@@ -523,7 +523,7 @@ async function run() {
             core.info("At least one setting must be enabled: \"project\" or \"milestone\".");
             return;
         }
-        if (!["issue", "project_card"].includes(github.context.eventName)) {
+        if (!["issues", "project_card"].includes(github.context.eventName)) {
             core.info("This action is supposed to run for issues and projects only. Stepping out...");
             return;
         }
