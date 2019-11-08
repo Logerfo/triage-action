@@ -574,7 +574,7 @@ async function* getProjectConfigs() {
         },
     };
     const config = await getConfig();
-    for (const project of config) {
+    for (const project of Object.values(config)) {
         if (!["organization", "user"].includes(project.type)) {
             core.setFailed(`${project}.type is supposed to be "organization" or "user". Failing...`);
             return;
