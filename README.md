@@ -20,6 +20,7 @@ jobs:
     name: Triage
     runs-on: ubuntu-16.04
     steps:
+    - uses: actions/checkout@master
     - uses: Logerfo/triage-action@0.0.1
       with:
         github-token: ${{ secrets.GITHUB_TOKEN }}
@@ -40,6 +41,7 @@ jobs:
     name: Triage
     runs-on: ubuntu-16.04
     steps:
+    - uses: actions/checkout@master # Not needed if project is set to false
     - uses: Logerfo/triage-action@0.0.1
       with:
         github-token: ${{ secrets.GITHUB_TOKEN }} # The `GITHUB_TOKEN` secret.
