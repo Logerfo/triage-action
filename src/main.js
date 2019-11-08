@@ -48,12 +48,8 @@ async function run() {
                     core.info("Project is disabled. Consider removing the \"project_card\" from the trigger events. Stepping out...");
                     return;
                 }
-                var cardResponse = await client.projects.getCard({
-                    card_id: context.payload.project_card.id,
-                });
-                core.debug(JSON.stringify(cardResponse.data));
                 var issueResponse = await client.issues.get({
-                    issue_number: getCardIssueId(cardResponse.data),
+                    issue_number: getCardIssueId(context.payload),
                     owner,
                     repo,
                 });
