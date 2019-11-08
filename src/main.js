@@ -130,7 +130,7 @@ async function triage(issue, knownContained = false) {
     if (isTriage && !isLabeled) {
         core.info(`Applying "${label}" label...`);
         const labelResponse = await client.issues.addLabels({
-            issue_number: context.issue.number,
+            issue_number: issue.number,
             labels: [label],
             owner,
             repo,
@@ -140,7 +140,7 @@ async function triage(issue, knownContained = false) {
     else if (!isTriage && isLabeled) {
         core.info(`Removing "${label}" label...`);
         const labelResponse = await client.issues.removeLabel({
-            issue_number: context.issue.number,
+            issue_number: issue.number,
             owner,
             name: label,
             repo,
