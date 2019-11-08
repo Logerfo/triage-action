@@ -30,13 +30,13 @@ async function run() {
             return;
         }
         const event = await getEvent();
-        if (!["milestoned", "demilestoned", "created", "deleted"].includes(event.action)) {
+        if (!["opened", "milestoned", "demilestoned", "created", "deleted"].includes(event.action)) {
             core.info("This action is supposed to run for milestone and project changes and issue creation only. Stepping out...");
             return;
         }
         switch (github.context.eventName) {
             case "issue":
-                if (event.action != "created" && !milestone) {
+                if (event.action != "opened" && !milestone) {
                     core.info("Milestone is disbled. Consider removing the \"milestoned\" and \"demilestoned\" from the trigger types. Stepping out...");
                     return;
                 }
