@@ -40,6 +40,7 @@ async function run() {
                     core.info("Milestone is disbled. Consider removing the \"milestoned\" and \"demilestoned\" from the trigger types. Stepping out...");
                     return;
                 }
+                await triage(context.payload.issue);
                 break;
 
             case "project_card":
@@ -47,13 +48,19 @@ async function run() {
                     core.info("Project is disabled. Consider removing the \"project_card\" from the trigger events. Stepping out...");
                     return;
                 }
+                var cardResponse = await client.projects.getCard({
+                    card_id: context.payload.project_card.id,
+                });
+                core.debug(JSON.stringify(cardResponse.data));
+                var issueResponse = await client.issues.get({
+                    issue_number: getCardIssueId(cardResponse.data),
+                    owner,
+                    repo,
+                });
+                core.debug(JSON.stringify(issueResponse.data));
+                await triage(issueResponse.data, event.action == "created");
                 break;
         }
-        if (context.payload.issue.state != "open") {
-            core.info("Issue is not open. Stepping out...");
-            return;
-        }
-        await triage();
     }
     catch (err) {
         //Even if it's a valid situation, we want to fail the action in order to be able to find the issue and fix it.
@@ -62,11 +69,16 @@ async function run() {
     }
 }
 
+function getCardIssueId(card) {
+    const items = card.content_url.split('/');
+    return items[items.length - 1];
+}
+
 function labelMap(label) {
     return label.name;
 }
 
-async function projectContained() {
+async function projectContained(issue) {
     let projectPage = 0,
         projectsResult;
     do {
@@ -96,9 +108,7 @@ async function projectContained() {
                         });
                         core.debug(JSON.stringify(cardsResult.data));
                         for (const card of cardsResult.data) {
-                            const items = card.url.split('/');
-                            const id = items[items.length - 1];
-                            if (context.payload.issue.number == id) {
+                            if (issue.number == getCardIssueId(card)) {
                                 return true;
                             }
                         }
@@ -110,9 +120,13 @@ async function projectContained() {
     return false;
 }
 
-async function triage() {
-    const isTriage = milestone && !context.payload.issue.milestone && project && !await projectContained();
-    const isLabeled = context.payload.issue.labels.map(labelMap).includes(label);
+async function triage(issue, knownContained = false) {
+    if (issue.state != "open") {
+        core.info("Issue is not open. Stepping out...");
+        return;
+    }
+    const isTriage = milestone && !issue.milestone && project && !(knownContained || await projectContained(issue));
+    const isLabeled = issue.labels.map(labelMap).includes(label);
     if (isTriage && !isLabeled) {
         core.info(`Applying "${label}" label...`);
         const labelResponse = await client.issues.addLabels({
