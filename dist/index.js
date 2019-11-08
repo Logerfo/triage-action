@@ -653,7 +653,7 @@ async function projectContained() {
 
 async function triage() {
     const isTriage = milestone && !context.payload.issue.milestone || project && !await projectContained();
-    const isLabeled = context.payload.issue.map(labelMap).includes(label);
+    const isLabeled = context.payload.issue.labels.map(labelMap).includes(label);
     if (isTriage && !isLabeled) {
         core.info(`Applying "${label}" label...`);
         const labelResponse = await client.issues.addLabels({
