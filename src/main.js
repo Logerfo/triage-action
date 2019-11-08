@@ -198,7 +198,7 @@ async function triage() {
         core.debug(JSON.stringify(labelResponse.data));
     }
     else {
-        core.info("State haven't changed. Skipping...");
+        core.info("State hasn't changed. Skipping...");
     }
 }
 
