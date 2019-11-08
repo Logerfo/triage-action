@@ -19,9 +19,6 @@ inputs:
   milestone:
     description: Enable or disable the idea that setting a milestone to an issue drops its triage state.
     default: true
-  config-path:
-    description: The optional configuration file path.
-    default: .github/triage.yml
 
 runs:
   using: 'node12'
