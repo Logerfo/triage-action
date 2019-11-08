@@ -96,7 +96,7 @@ async function projectContained() {
                         });
                         core.debug(JSON.stringify(cardsResult.data));
                         for (const card of cardsResult.data) {
-                            const items = card.url.split('/');
+                            const items = card.content_url.split('/');
                             const id = items[items.length - 1];
                             if (context.payload.issue.number == id) {
                                 return true;
