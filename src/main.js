@@ -127,8 +127,8 @@ async function triage() {
         core.info(`Removing "${label}" label...`);
         const labelResponse = await client.issues.removeLabel({
             issue_number: context.issue.number,
-            label,
             owner,
+            name: label,
             repo,
         });
         core.debug(JSON.stringify(labelResponse.data));
