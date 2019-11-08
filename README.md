@@ -10,7 +10,7 @@ Create a file named `.github/workflows/triage.yml`.
 ```yml
 name: Triage
 on: 
-  issue:
+  issues:
     types: [created, milestoned, demilestoned]
   project_card:
     types: [created, deleted]
@@ -30,7 +30,7 @@ All values are default.
 ```yml
 name: Triage
 on: 
-  issue: 
+  issues: 
     types: [created, milestoned, demilestoned] # The last two are not needed if milestone is set to false
   project_card: # Not needed if project is set to false
     types: [created, deleted]
