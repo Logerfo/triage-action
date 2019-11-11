@@ -20,7 +20,7 @@ jobs:
     name: Triage
     runs-on: ubuntu-16.04
     steps:
-    - uses: Logerfo/triage-action@0.0.1
+    - uses: Logerfo/triage-action@0.0.2
       with:
         github-token: ${{ secrets.GITHUB_TOKEN }}
 ```
@@ -40,7 +40,7 @@ jobs:
     name: Triage
     runs-on: ubuntu-16.04
     steps:
-    - uses: Logerfo/triage-action@0.0.1
+    - uses: Logerfo/triage-action@0.0.2
       with:
         github-token: ${{ secrets.GITHUB_TOKEN }} # The `GITHUB_TOKEN` secret.
         label: triage # The triage label of your repository.
