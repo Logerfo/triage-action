@@ -1,6 +1,6 @@
 {
   "name": "triage-action",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "private": true,
   "description": "A GitHub Action that manages triage state in issues.",
   "keywords": [
