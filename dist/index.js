@@ -427,7 +427,7 @@ async function run() {
             return;
         }
         const event = await getEvent();
-        if (!["opened", "milestoned", "demilestoned", "created", "deleted"].includes(event.action)) {
+        if (!["opened", "closed", "milestoned", "demilestoned", "created", "deleted"].includes(event.action)) {
             core.info("This action is supposed to run for milestone and project changes and issue creation only. Stepping out...");
             return;
         }
@@ -437,7 +437,17 @@ async function run() {
                     core.info("Milestone is disbled. Consider removing the \"milestoned\" and \"demilestoned\" from the trigger types. Stepping out...");
                     return;
                 }
-                await triage(context.payload.issue);
+                if (event.action == "closed") {
+                    if (context.payload.issue.labels.map(labelMap).includes(label)) {
+                        await removeLabel(context.payload.issue);
+                    }
+                    else {
+                        core.info("Closed label doesn't have triage label. Stepping out...");
+                    }
+                }
+                else {
+                    await triage(context.payload.issue);
+                }
                 break;
 
             case "project_card":
@@ -521,28 +531,36 @@ async function triage(issue, knownContained = false) {
     const isTriage = milestone && !issue.milestone && project && !(knownContained || await projectContained(issue));
     const isLabeled = issue.labels.map(labelMap).includes(label);
     if (isTriage && !isLabeled) {
-        core.info(`Applying "${label}" label...`);
-        const labelResponse = await client.issues.addLabels({
-            issue_number: issue.number,
-            labels: [label],
-            owner,
-            repo,
-        });
-        core.debug(JSON.stringify(labelResponse.data));
+        await addLabel(issue);
     }
     else if (!isTriage && isLabeled) {
-        core.info(`Removing "${label}" label...`);
-        const labelResponse = await client.issues.removeLabel({
-            issue_number: issue.number,
-            owner,
-            name: label,
-            repo,
-        });
-        core.debug(JSON.stringify(labelResponse.data));
+        await removeLabel(issue);
     }
     else {
         core.info("State hasn't changed. Skipping...");
     }
+}
+
+async function addLabel(issue) {
+    core.info(`Applying "${label}" label...`);
+    const labelResponse = await client.issues.addLabels({
+        issue_number: issue.number,
+        labels: [label],
+        owner,
+        repo,
+    });
+    core.debug(JSON.stringify(labelResponse.data));
+}
+
+async function removeLabel(issue) {
+    core.info(`Removing "${label}" label...`);
+    const labelResponse = await client.issues.removeLabel({
+        issue_number: issue.number,
+        owner,
+        name: label,
+        repo,
+    });
+    core.debug(JSON.stringify(labelResponse.data));
 }
 
 run();
