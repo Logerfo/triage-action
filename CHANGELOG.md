@@ -1,5 +1,5 @@
 ## 0.0.2 - 2019-11-11
-Removing the triage label when the issue is closed. In order for this to work for already configurated workflows, the `closed` event action must be added to the `issues` event types array:
+Removing the triage label when the issue is closed. In order for this to work for already configured workflows, the `closed` event action must be added to the `issues` event types array:
 ```diff
 issues:
 -  types: [opened, milestoned, demilestoned]
